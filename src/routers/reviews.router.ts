@@ -17,13 +17,12 @@ router.put("/update-review/:id", withAuth, tryCatch(updateReview));
 router.delete(
   "/delete-review/:id",
   withAuth,
-  authorizedFor("admin"),
   tryCatch(deleteReview)
 );
 router.get(
   "/get-reviews",
   withAuth,
-  authorizedFor("admin"),
+  authorizedFor("admin","guest"),
   tryCatch(getReviews)
 );
 export { router as reviewRouter };

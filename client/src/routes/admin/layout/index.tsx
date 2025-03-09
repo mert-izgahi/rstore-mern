@@ -8,9 +8,9 @@ import NotificationsMenu from "@/components/shared/notifications-menu";
 
 const Layout = () => {
     const { isAuthenticated, account } = useAuthStore();
-    const isAdmin = useMemo(() => account?.role === "admin", [account]);
+    const isAllowed = useMemo(() => account?.role === "admin" || account?.role === "guest", [account]);
 
-    if (!isAuthenticated || !isAdmin) {
+    if (!isAuthenticated || !isAllowed) {
         return <Navigate to="/" />
     }
 

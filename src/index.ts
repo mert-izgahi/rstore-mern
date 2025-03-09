@@ -24,7 +24,13 @@ import { logger } from "./lib/logger";
 const app = express();
 
 const corsOptions = {
-  origin:"*",
+  origin: (origin: string, callback: any) => {
+    if (configs.ALLOWED_ORIGINS.indexOf(origin) !== -1 || !origin) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
   credentials: true,
   optionsSuccessStatus: 200,
 } as CorsOptions;

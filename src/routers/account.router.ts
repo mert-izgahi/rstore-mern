@@ -17,19 +17,21 @@ import {
   sendVerificationEmail,
   getAccounts,
   getAccountById,
+  authAsGuest,
 } from "../controllers/account.controller";
 
 const router = Router();
 
 router.post("/sign-up", tryCatch(signUp));
 router.post("/sign-in", tryCatch(signIn));
+router.post("/auth-as-guest", tryCatch(authAsGuest));
 router.post("/sign-out", withAuth, tryCatch(signOut));
 router.get("/get-my-account", withAuth, tryCatch(getMyAccount));
 router.put("/update-account-by-id/:id", withAuth, tryCatch(updateAccountById));
 router.put(
   "/toggle-account-block-by-id/:id",
   withAuth,
-  authorizedFor("admin"),
+  authorizedFor("admin","guest"),
   tryCatch(toggleBlockById)
 );
 router.put(
@@ -49,14 +51,14 @@ router.post(
 router.get(
   "/get-accounts",
   withAuth,
-  authorizedFor("admin"),
+  authorizedFor("admin","guest"),
   tryCatch(getAccounts)
 );
 
 router.get(
   "/get-account/:id",
   withAuth,
-  authorizedFor("admin"),
+  authorizedFor("admin","guest"),
   tryCatch(getAccountById)
 );
 

@@ -6,16 +6,21 @@ import {
   createOrder,
   getOrders,
   getOrder,
-  updateOrderStatus
+  updateOrderStatus,
 } from "../controllers/order.controller";
 
 const router = Router();
 
-router.post("/create-order", withAuth, tryCatch(createOrder));
+router.post(
+  "/create-order",
+  withAuth,
+  authorizedFor("admin", "user"),
+  tryCatch(createOrder)
+);
 router.get(
   "/get-orders",
   withAuth,
-  authorizedFor("admin"),
+  authorizedFor("admin", "guest"),
   tryCatch(getOrders)
 );
 
@@ -24,7 +29,7 @@ router.get("/get-order/:id", withAuth, tryCatch(getOrder));
 router.put(
   "/update-order-status/:id",
   withAuth,
-  authorizedFor("admin"),
+  authorizedFor("admin", "guest"),
   tryCatch(updateOrderStatus)
 );
 

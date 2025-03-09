@@ -2,6 +2,7 @@
 import { AccountModel } from "../models/account.model";
 import { ApiError } from "../lib/api-error";
 import mailService from "../lib/mail";
+import { Role } from "../lib/enums";
 
 export const signUp = async (req: Request, res: Response) => {
   const { email } = req.body;
@@ -25,9 +26,24 @@ export const signUp = async (req: Request, res: Response) => {
 export const signIn = async (req: Request, res: Response) => {
   const { email, password } = req.body;
   const account = await AccountModel.findByCredentials(email, password);
-  console.log({ account });
 
   if (!account) throw ApiError.invalidCredentials();
+  const jwtToken = account.getJwtToken();
+  res
+    .cookie("token", jwtToken, { httpOnly: true, sameSite: "lax" })
+    .status(200)
+    .json({
+      status: 200,
+      message: "Account logged in successfully",
+      title: "Success",
+      data: account,
+    });
+};
+
+export const authAsGuest = async (req: Request, res: Response) => {
+  const account = await AccountModel.findOne({ role: Role.GUEST });
+
+  if (!account) throw ApiError.notFound();
   const jwtToken = account.getJwtToken();
   res
     .cookie("token", jwtToken, { httpOnly: true, sameSite: "lax" })
@@ -53,7 +69,9 @@ export const signOut = async (req: Request, res: Response) => {
 
 export const getMyAccount = async (req: Request, res: Response) => {
   const { currentUserId } = res.locals;
-  const account = await AccountModel.findById(currentUserId).populate("orders reviews");
+  const account = await AccountModel.findById(currentUserId).populate(
+    "orders reviews"
+  );
   if (!account) throw ApiError.notFound();
   res.status(200).json({
     status: 200,
@@ -74,7 +92,6 @@ export const updateAccountById = async (req: Request, res: Response) => {
     title: "Success",
   });
 };
-
 
 export const toggleBlockById = async (req: Request, res: Response) => {
   const { id } = req.params;
@@ -121,7 +138,7 @@ export const updatePassword = async (req: Request, res: Response) => {
 export const sendVerificationEmail = async (req: Request, res: Response) => {
   const { id } = req.params;
   const account = await AccountModel.findById(id);
-  if(!account) throw ApiError.notFound();
+  if (!account) throw ApiError.notFound();
   const verificationToken = account?.getVerificationToken();
   await mailService.sendVerificationEmail(account?.email, verificationToken);
   res.status(200).json({
@@ -161,8 +178,7 @@ export const forgotPassword = async (req: Request, res: Response) => {
 export const resetPassword = async (req: Request, res: Response) => {
   const { password } = req.body;
   const { passwordResetToken } = req.params;
-  
-  
+
   const account = await AccountModel.findByPasswordResetTokenAndReset(
     passwordResetToken,
     password

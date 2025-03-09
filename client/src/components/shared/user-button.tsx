@@ -60,7 +60,7 @@ function UserButton() {
                     </DropdownMenuItem>
                 ))}
                 {
-                    role === "admin" && (
+                    (role === "admin" || role === "guest") && (
                         <>
                             <DropdownMenuSeparator />
                             <DropdownMenuItem asChild className="cursor-pointer rounded-xs">
