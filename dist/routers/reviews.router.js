@@ -9,5 +9,5 @@ const router = (0, express_1.Router)();
 exports.reviewRouter = router;
 router.post("/create-review", auth_middleware_1.withAuth, (0, trycatch_middleware_1.tryCatch)(reviews_controller_1.createReview));
 router.put("/update-review/:id", auth_middleware_1.withAuth, (0, trycatch_middleware_1.tryCatch)(reviews_controller_1.updateReview));
-router.delete("/delete-review/:id", auth_middleware_1.withAuth, (0, auth_middleware_1.authorizedFor)("admin"), (0, trycatch_middleware_1.tryCatch)(reviews_controller_1.deleteReview));
-router.get("/get-reviews", auth_middleware_1.withAuth, (0, auth_middleware_1.authorizedFor)("admin"), (0, trycatch_middleware_1.tryCatch)(reviews_controller_1.getReviews));
+router.delete("/delete-review/:id", auth_middleware_1.withAuth, (0, trycatch_middleware_1.tryCatch)(reviews_controller_1.deleteReview));
+router.get("/get-reviews", auth_middleware_1.withAuth, (0, auth_middleware_1.authorizedFor)("admin", "guest"), (0, trycatch_middleware_1.tryCatch)(reviews_controller_1.getReviews));

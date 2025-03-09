@@ -33,7 +33,14 @@ const stripe_router_1 = require("./routers/stripe.router");
 const logger_1 = require("./lib/logger");
 const app = (0, express_1.default)();
 const corsOptions = {
-    origin: "*",
+    origin: (origin, callback) => {
+        if (configs_1.default.ALLOWED_ORIGINS.indexOf(origin) !== -1 || !origin) {
+            callback(null, true);
+        }
+        else {
+            callback(new Error("Not allowed by CORS"));
+        }
+    },
     credentials: true,
     optionsSuccessStatus: 200,
 };

@@ -12,10 +12,11 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getAccountById = exports.getAccounts = exports.resetPassword = exports.forgotPassword = exports.verifyAccount = exports.sendVerificationEmail = exports.updatePassword = exports.toggleDeleteById = exports.toggleBlockById = exports.updateAccountById = exports.getMyAccount = exports.signOut = exports.signIn = exports.signUp = void 0;
+exports.getAccountById = exports.getAccounts = exports.resetPassword = exports.forgotPassword = exports.verifyAccount = exports.sendVerificationEmail = exports.updatePassword = exports.toggleDeleteById = exports.toggleBlockById = exports.updateAccountById = exports.getMyAccount = exports.signOut = exports.authAsGuest = exports.signIn = exports.signUp = void 0;
 const account_model_1 = require("../models/account.model");
 const api_error_1 = require("../lib/api-error");
 const mail_1 = __importDefault(require("../lib/mail"));
+const enums_1 = require("../lib/enums");
 const signUp = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { email } = req.body;
     const existingAccount = yield account_model_1.AccountModel.findByEmail(email);
@@ -38,7 +39,6 @@ exports.signUp = signUp;
 const signIn = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { email, password } = req.body;
     const account = yield account_model_1.AccountModel.findByCredentials(email, password);
-    console.log({ account });
     if (!account)
         throw api_error_1.ApiError.invalidCredentials();
     const jwtToken = account.getJwtToken();
@@ -53,6 +53,22 @@ const signIn = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     });
 });
 exports.signIn = signIn;
+const authAsGuest = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const account = yield account_model_1.AccountModel.findOne({ role: enums_1.Role.GUEST });
+    if (!account)
+        throw api_error_1.ApiError.notFound();
+    const jwtToken = account.getJwtToken();
+    res
+        .cookie("token", jwtToken, { httpOnly: true, sameSite: "lax" })
+        .status(200)
+        .json({
+        status: 200,
+        message: "Account logged in successfully",
+        title: "Success",
+        data: account,
+    });
+});
+exports.authAsGuest = authAsGuest;
 const signOut = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     res
         .clearCookie("token", { httpOnly: true, sameSite: "none" })
