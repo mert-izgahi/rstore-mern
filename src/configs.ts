@@ -21,5 +21,5 @@ export default {
   MAIL_FROM: process.env.MAIL_FROM,
   CLIENT_URL: process.env.CLIENT_URL,
   STRIPE_SECRET_KEY: process.env.STRIPE_SECRET_KEY,
-  ALLOWED_ORIGINS: ["http://localhost:3000"],
+  ALLOWED_ORIGINS: ["*", "http://localhost:3000", "http://localhost:5001"],
 };

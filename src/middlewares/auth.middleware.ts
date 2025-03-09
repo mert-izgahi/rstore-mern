@@ -60,22 +60,25 @@ export const withAuth = (req: Request, res: Response, next: NextFunction) => {
   const { currentUserId } = res.locals;
   if (!currentUserId) {
     logger.error("Invalid token");
-    return next(ApiError.invalidCredentials());
+    next(ApiError.invalidCredentials());
+    return;
   }
-  return next();
+  next();
 };
 
 export const authorizedFor = (...roles: string[]) => {
   return (req: Request, res: Response, next: NextFunction) => {
     const { currentUserRole } = res.locals;
     if (!currentUserRole) {
-      return next(ApiError.invalidCredentials());
+      next(ApiError.invalidCredentials());
+      return 
     }
 
     if (!roles.includes(currentUserRole)) {
-      return next(ApiError.invalidCredentials());
+      next(ApiError.invalidCredentials());
+      return;
     }
 
-    return next();
+    next();
   };
 };

@@ -1,4 +1,4 @@
-﻿import SignUpForm from "@/components/forms/sign-UP-form"
+﻿import SignUpForm from "@/components/forms/sign-up-form"
 import { Button } from "@/components/ui/button"
 import { Link } from "react-router-dom"
 

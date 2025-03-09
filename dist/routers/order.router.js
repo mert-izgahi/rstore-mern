@@ -1,0 +1,13 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.orderRouter = void 0;
+const express_1 = require("express");
+const trycatch_middleware_1 = require("../middlewares/trycatch.middleware");
+const auth_middleware_1 = require("../middlewares/auth.middleware");
+const order_controller_1 = require("../controllers/order.controller");
+const router = (0, express_1.Router)();
+exports.orderRouter = router;
+router.post("/create-order", auth_middleware_1.withAuth, (0, trycatch_middleware_1.tryCatch)(order_controller_1.createOrder));
+router.get("/get-orders", auth_middleware_1.withAuth, (0, auth_middleware_1.authorizedFor)("admin"), (0, trycatch_middleware_1.tryCatch)(order_controller_1.getOrders));
+router.get("/get-order/:id", auth_middleware_1.withAuth, (0, trycatch_middleware_1.tryCatch)(order_controller_1.getOrder));
+router.put("/update-order-status/:id", auth_middleware_1.withAuth, (0, auth_middleware_1.authorizedFor)("admin"), (0, trycatch_middleware_1.tryCatch)(order_controller_1.updateOrderStatus));

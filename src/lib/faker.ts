@@ -52,14 +52,6 @@ export const createFakeAccount = (): Partial<IAccountDocument> => {
     isBlocked: faker.datatype.boolean(),
     isDeleted: faker.datatype.boolean(),
     isVerified: faker.datatype.boolean(),
-    address: new Array(Math.floor(Math.random() * 5)).fill({
-      isDefault: faker.datatype.boolean(),
-      street: faker.location.street(),
-      city: faker.location.city(),
-      state: faker.location.state(),
-      country: faker.location.country(),
-      zipCode: faker.location.zipCode(),
-    }),
   };
 };
 

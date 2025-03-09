@@ -177,10 +177,6 @@ function CheckoutForm() {
                                         <RadioGroupItem value={PaymentMethod.CASH_ON_DELIVERY} id="cod" />
                                         <label htmlFor="cod">Cash on Delivery</label>
                                     </div>
-                                    <div className="flex items-center space-x-2">
-                                        <RadioGroupItem value={PaymentMethod.PAYPAL} id="paypal" />
-                                        <label htmlFor="paypal">PayPal</label>
-                                    </div>
                                 </RadioGroup>
                             </FormControl>
                             <FormMessage />

@@ -1,0 +1,11 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.stripeRouter = void 0;
+const express_1 = require("express");
+const trycatch_middleware_1 = require("../middlewares/trycatch.middleware");
+const auth_middleware_1 = require("../middlewares/auth.middleware");
+const stripe_controller_1 = require("../controllers/stripe.controller");
+const router = (0, express_1.Router)();
+exports.stripeRouter = router;
+router.post("/create-stripe-session/:id", auth_middleware_1.withAuth, (0, trycatch_middleware_1.tryCatch)(stripe_controller_1.createStripeSession));
+router.get("/stripe-success-callback", auth_middleware_1.withAuth, (0, trycatch_middleware_1.tryCatch)(stripe_controller_1.stripeSuccessCallback));

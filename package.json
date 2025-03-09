@@ -4,7 +4,11 @@
   "description": "```bash npm create vite@latest cd client npm install npm run dev ```",
   "main": "index.js",
   "scripts": {
-    "dev": "ts-node-dev --respawn --transpile-only --ignore-watch node_modules --no-notify src/index.ts",
+    "dev": "NODE_ENV=development ts-node-dev --respawn --transpile-only src/index.ts",
+    "build-client": "npm install --prefix ./client && npm run build --prefix ./client",
+    "build-server": "npm install && tsc -b",
+    "build": "npm run build-client && npm run build-server",
+    "start": "NODE_ENV=production node dist/index.js",
     "seed-db": "cd ./src/lib && ts-node faker.ts"
   },
   "keywords": [],

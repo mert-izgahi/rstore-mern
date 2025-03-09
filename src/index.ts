@@ -2,9 +2,10 @@
 import cookieParser from "cookie-parser";
 import expressFileUpload from "express-fileupload";
 import cors, { CorsOptions } from "cors";
-
+import path from "path";
 import configs from "./configs";
 import { connectDatabase } from "./lib/mongoose";
+import { Request, Response } from "express";
 // Middlewares
 import { loggerMiddleware } from "./middlewares/logger.middleware";
 import { errorHandlerMiddleware } from "./middlewares/error-handler.middleware";
@@ -23,13 +24,7 @@ import { logger } from "./lib/logger";
 const app = express();
 
 const corsOptions = {
-  origin: (origin: string, callback: any) => {
-    if (configs.ALLOWED_ORIGINS.includes(origin)) {
-      callback(null, true);
-    } else {
-      callback(new Error("Not allowed by CORS"));
-    }
-  },
+  origin:"*",
   credentials: true,
   optionsSuccessStatus: 200,
 } as CorsOptions;
@@ -45,12 +40,8 @@ app.use(
     debug: configs.NODE_ENV === "development",
   })
 );
-
 app.use(loggerMiddleware);
 app.use(authMiddleware);
-app.get("/", (req, res) => {
-  res.send("Hello World!");
-});
 
 app.use("/api", accountRouter);
 app.use("/api", storageRouter);
@@ -58,6 +49,15 @@ app.use("/api", productRouter);
 app.use("/api", orderRouter);
 app.use("/api", reviewRouter);
 app.use("/api", stripeRouter);
+// Deployment
+if (process.env.NODE_ENV === "production") {
+  const staticPath = path.join(__dirname, "../public");
+  app.use(express.static(staticPath));
+  app.get("*", (req: Request, res: Response) => {
+    res.sendFile(path.join(staticPath, "index.html"));
+  });
+}
+
 
 app.use(errorHandlerMiddleware);
 app.use(notFoundMiddleware);
