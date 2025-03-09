@@ -6,6 +6,7 @@ import { Input } from "../ui/input"
 import SubmitButton from "../shared/submit-button"
 import { useSignUp } from "@/hooks/auth/use-sign-up"
 import { Alert, AlertDescription, AlertTitle } from "../ui/alert"
+import AuthAsGuestButton from "../shared/auth-as-guest-button"
 
 function SignUpForm() {
     const { isPending, error, signUp } = useSignUp();
@@ -103,6 +104,8 @@ function SignUpForm() {
                     )}
                 />
                 <SubmitButton text="Create Account" loading={isPending} />
+
+                <AuthAsGuestButton />
             </form>
         </Form>
     )
