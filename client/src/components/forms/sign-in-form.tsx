@@ -6,7 +6,6 @@ import { Input } from "../ui/input"
 import SubmitButton from "../shared/submit-button"
 import { useSignIn } from "@/hooks/auth/use-sign-in"
 import { Alert, AlertDescription, AlertTitle } from "../ui/alert"
-import AuthAsGuestButton from "../shared/auth-as-guest-button"
 
 function SignInForm() {
     const { isPending, error, signIn } = useSignIn();
@@ -66,8 +65,6 @@ function SignInForm() {
                 />
                 
                 <SubmitButton text="Sign In" className="w-full" loading={isPending} />
-
-                <AuthAsGuestButton />
             </form>
         </Form>
     )
